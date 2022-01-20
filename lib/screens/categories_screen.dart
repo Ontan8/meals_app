@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'category_items.dart';
-import './models/dummy_data.dart';
+import '../widgets/category_items.dart';
+import '../models/dummy_data.dart';
 
 //the main screen which shows the categories in a grid layout. pressing on the grids should take the user to the information meal.
 class CategoriesScreen extends StatelessWidget {
