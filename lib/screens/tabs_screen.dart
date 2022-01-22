@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/screens/categories_screen.dart';
 import 'package:flutter_complete_guide/screens/favorites_screen.dart';
+import 'package:flutter_complete_guide/widgets/main_drawer.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({Key? key}) : super(key: key);
@@ -10,33 +11,39 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
+  final List<Map<String, Object>> pages = [
+    {'page': CategoriesScreen(), 'title': 'Categories'},
+    {'page': FavoritesScreen(), 'title': 'Your Favorites'}
+  ];
+  int selectedPageIndex = 0;
+  void selectPage(int index) {
+    setState(() {
+      selectedPageIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Meals'),
-          bottom: TabBar(
-            tabs: [
-              Tab(
-                text: 'Categories',
-                icon: Icon(Icons.category),
-              ),
-              Tab(
-                icon: Icon(Icons.star),
-                text: 'Favorites',
-              )
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            CategoriesScreen(),
-            FavoritesScreen(),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(pages[selectedPageIndex]['title'] as String),
       ),
-      length: 2,
+      drawer: Drawer(
+        child: MainDrawer(),
+      ),
+      body: pages[selectedPageIndex]['page'] as Widget,
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: selectPage,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.category), label: 'Categories'),
+          BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Favorites'),
+        ],
+        backgroundColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Theme.of(context).accentColor,
+        currentIndex: selectedPageIndex,
+      ),
     );
   }
 }
