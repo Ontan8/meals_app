@@ -3,6 +3,7 @@ import 'package:flutter_complete_guide/screens/categories_screen.dart';
 import 'package:flutter_complete_guide/screens/favorites_screen.dart';
 import 'package:flutter_complete_guide/widgets/main_drawer.dart';
 
+//this uses the CategoriesScreen() to render so both this file and categories_screen.dart are important and in a sense the main page of the application.
 class TabsScreen extends StatefulWidget {
   const TabsScreen({Key? key}) : super(key: key);
 
