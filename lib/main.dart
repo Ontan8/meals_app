@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide/models/dummy_data.dart';
+import 'package:flutter_complete_guide/models/meal.dart';
 import 'package:flutter_complete_guide/screens/categories_screen.dart';
 import 'package:flutter_complete_guide/screens/category_meals_screen.dart';
 import 'package:flutter_complete_guide/screens/filters_screen.dart';
@@ -7,7 +9,40 @@ import './screens/tabs_screen.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Map<String, bool> filters = {
+    'gluten': false,
+    'lactose': false,
+    'vegan': false,
+    'vegetarian': false
+  };
+  List<Meal> availableMeals = DUMMY_MEALS;
+  void setFilters(Map<String, bool> filterData) {
+    setState(() {
+      filters = filterData;
+      availableMeals = DUMMY_MEALS.where((element) {
+        if (filters['gluten'] == true && !element.isGlutenFree) {
+          return false;
+        }
+        if (filters['lactose'] == true && !element.isLactoseFree) {
+          return false;
+        }
+        if (filters['vegan'] == true && !element.isVegan) {
+          return false;
+        }
+        if (filters['vegetarian'] == true && !element.isVegetarian) {
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,9 +62,9 @@ class MyApp extends StatelessWidget {
       home: CategoriesScreen(),
       initialRoute: '/tabs',
       routes: {
-        FiltersScreen.routeName: (ctx) => FiltersScreen(),
+        FiltersScreen.routeName: (ctx) => FiltersScreen(setFilters, filters),
         '/tabs': (ctx) => TabsScreen(),
-        '/category-meals': (ctx) => CategoryMealsScreen(),
+        '/category-meals': (ctx) => CategoryMealsScreen(availableMeals),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
       },
     );
